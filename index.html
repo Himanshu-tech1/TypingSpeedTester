@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="edclub-light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TypingSpeedTester - Touch Typing Learning & Speed Test Game</title>
+  <meta name="description" content="Master touch typing with TypingSpeedTester. Interactive lessons, animated virtual keyboard with hand guides, 5-star scoring, and live WPM analytics.">
+  <link rel="stylesheet" href="styles.css?v=21">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+  <!-- Caps Lock Alert -->
+  <div id="capsLockWarning" class="caps-lock-warning" role="alert" aria-live="polite">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 3v14M5 10l7-7 7 7M5 21h14"/>
+    </svg>
+    <span>Caps Lock is ON</span>
+  </div>
+
+  <div class="app-container">
+    <!-- Top Navigation & Brand Header -->
+    <header class="app-header">
+      <div class="brand" id="brandLogo">
+        <div class="brand-icon edclub-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="brand-text">Typing<span>SpeedTester</span></h1>
+          <span class="brand-sub">Touch Typing & Speed Training</span>
+        </div>
+      </div>
+
+      <!-- Main Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button class="nav-tab active" id="tabLessons" data-view="roadmap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          TypingSpeedTester
+        </button>
+        <button class="nav-tab" id="tabKeyTrainer" data-view="keytrainer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="6" y1="8" x2="6" y2="8"/><line x1="10" y1="8" x2="10" y2="8"/><line x1="14" y1="8" x2="14" y2="8"/><line x1="18" y1="8" x2="18" y2="8"/><line x1="8" y1="16" x2="16" y2="16"/></svg>
+          Key Trainer (Specific Keys)
+        </button>
+        <button class="nav-tab" id="tabSpeedTest" data-view="speedtest">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Speed Test
+        </button>
+      </nav>
+
+      <!-- User XP & Stats Header -->
+      <div class="header-controls">
+        <div class="user-stat-pill" title="Total Stars Earned">
+          <span class="star-icon">⭐</span>
+          <span id="totalStarsCount">0 / 80</span>
+        </div>
+        <div class="user-stat-pill xp-pill" title="Experience Points">
+          <span class="xp-icon">⚡</span>
+          <span id="userXpCount">0 XP</span>
+        </div>
+
+        <button id="soundToggleBtn" class="icon-btn" title="Toggle Mechanical Sound" aria-label="Toggle Sound">
+          <svg id="soundIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </button>
+
+        <button id="themeToggleBtn" class="icon-btn" title="Switch Theme (Light / Dark)" aria-label="Switch Theme">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- VIEW 1: LESSON ROADMAP / CURRICULUM -->
+    <section class="view-section active" id="roadmapView">
+      <div class="roadmap-hero">
+        <div class="roadmap-hero-info">
+          <h2>Welcome to TypingSpeedTester!</h2>
+          <p>Learn to touch type without looking at your keyboard. Progress through structured lessons, earn up to 5 stars on every level, and watch your speed soar.</p>
+        </div>
+        <button class="btn-play-hero" id="resumeLessonHeroBtn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span id="resumeLessonText">Continue Lesson 1</span>
+        </button>
+      </div>
+
+      <div class="curriculum-header">
+        <h3>Course Curriculum</h3>
+        <span class="course-prog-text" id="courseProgressText">0% Completed</span>
+      </div>
+
+      <!-- Grid of Lesson Cards -->
+      <div class="lessons-grid" id="lessonsGrid">
+        <!-- Injected dynamically via curriculum.js & app.js -->
+      </div>
+    </section>
+
+    <!-- VIEW 2: EDCLUB LESSON PRACTICE & KEY TRAINER ARENA -->
+    <section class="view-section" id="lessonArenaView">
+      <!-- Specific Key Selector Bar (Visible in Key Trainer Mode) -->
+      <div class="key-trainer-selector-panel" id="keyTrainerSelectorPanel" style="display: none;">
+        <div class="kt-panel-header">
+          <div class="kt-title-wrap">
+            <span class="kt-badge">🎯 SPECIFIC KEY PRACTICE</span>
+            <h3>Choose Target Key(s) to Practice (No Random Words)</h3>
+          </div>
+          <span class="kt-active-summary" id="ktActiveSummary">Current Drill: <strong>G & H</strong></span>
+        </div>
+
+        <!-- Preset Key Pairs -->
+        <div class="kt-presets-scroll">
+          <span class="kt-label">Pairs:</span>
+          <div class="kt-presets-list" id="ktPresetsList">
+            <!-- Injected dynamically via curriculum.js SPECIFIC_KEY_PRESETS -->
+          </div>
+        </div>
+
+        <!-- Single Key Quick Chips -->
+        <div class="kt-single-keys-row">
+          <span class="kt-label">Single Key:</span>
+          <div class="kt-chips-list" id="ktChipsList">
+            <!-- Injected dynamically: A-Z, space -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Lesson Top Bar -->
+      <div class="lesson-top-bar" id="arenaTopBar">
+        <button class="btn-back-lessons" id="btnBackToLessons">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          <span id="arenaBackBtnText">All Lessons</span>
+        </button>
+
+        <div class="lesson-meta-center">
+          <span class="lesson-number-pill" id="arenaLessonNumber">Lesson 1</span>
+          <h2 class="lesson-title-text" id="arenaLessonTitle">Home Row: F & J</h2>
+        </div>
+
+        <div class="lesson-live-metrics">
+          <div class="metric-box">
+            <span class="m-label">Speed</span>
+            <span class="m-val" id="arenaLiveWpm">0 WPM</span>
+          </div>
+          <div class="metric-box">
+            <span class="m-label">Accuracy</span>
+            <span class="m-val" id="arenaLiveAcc">100%</span>
+          </div>
+          <div class="metric-box stars-preview" id="arenaStarsPreview">
+            <span>⭐⭐⭐⭐⭐</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prominent Next Key To Press Spotlight Banner -->
+      <div class="target-key-spotlight-bar" id="targetKeySpotlightBar">
+        <div class="spotlight-left">
+          <span class="spotlight-badge-label">NEXT KEY TO PRESS</span>
+          <div class="spotlight-key-capsule" id="spotlightKeyCapsule">
+            <span class="spotlight-char-display" id="spotlightCharDisplay">F</span>
+          </div>
+        </div>
+        <div class="spotlight-center-desc" id="spotlightFingerDisplay">
+          <span class="spotlight-finger-icon" id="spotlightFingerIcon">👈</span>
+          <span class="spotlight-finger-text" id="spotlightFingerText">Press with <strong>Left Index Finger</strong></span>
+        </div>
+      </div>
+
+      <!-- EdClub Character Tiles Arena (Square Cards with Green Checkmarks & Blue Underline Cursor) -->
+      <div class="tile-arena-wrapper" id="lessonTypingBox">
+        <input type="text" id="lessonHiddenInput" class="typing-hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        
+        <div class="tiles-viewport" id="tilesViewport">
+          <div class="tiles-track" id="lessonTilesTrack">
+            <!-- Injected dynamically: <div class="char-tile"><span class="tile-check">✓</span><span class="tile-char">g</span><div class="tile-cursor"></div></div> -->
+          </div>
+        </div>
+
+        <div class="focus-overlay" id="lessonFocusOverlay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>Click to focus typing arena</span>
+        </div>
+      </div>
+
+      <!-- Lesson Text Progress Bar -->
+      <div class="lesson-progress-track">
+        <div class="lesson-progress-fill" id="lessonProgressFill"></div>
+      </div>
+
+      <!-- Finger & Hand Guide Instructions Banner -->
+      <div class="finger-guide-banner" id="fingerGuideBanner">
+        <div class="finger-guide-pill" id="fingerGuideText">
+          👈 Press <strong>'F'</strong> with your <strong>Left Index Finger</strong>
+        </div>
+      </div>
+
+      <!-- Virtual On-Screen Keyboard with Overlaid Hands -->
+      <div class="interactive-stage">
+        <div class="virtual-keyboard-wrap" id="virtualKeyboard">
+          <!-- Injected via keyboard.js with SVG line-art hands overlay -->
+        </div>
+
+        <!-- Hidden placeholder for hands container (overlaid directly inside virtual keyboard) -->
+        <div class="hands-container" id="handsContainer" style="display:none;"></div>
+      </div>
+
+      <!-- Lesson Quick Actions -->
+      <div class="lesson-actions-bar">
+        <button class="action-btn" id="restartLessonBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Restart (Tab)
+        </button>
+        <button class="action-btn" id="toggleHandsBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>
+          Toggle Hands
+        </button>
+      </div>
+    </section>
+
+    <!-- VIEW 3: FREE SPEED TEST ARENA -->
+    <section class="view-section" id="speedTestView">
+      <nav class="config-bar" id="speedConfigBar">
+        <div class="config-group" id="speedModeGroup">
+          <button class="config-btn active" data-mode="time">time</button>
+          <button class="config-btn" data-mode="words">words</button>
+          <button class="config-btn" data-mode="quote">quote</button>
+        </div>
+        <div class="config-divider"></div>
+        <div class="config-group" id="speedSubOptions"></div>
+      </nav>
+
+      <div class="live-hud">
+        <div class="hud-item">
+          <span class="hud-label" id="speedTimerLabel">Time</span>
+          <span class="hud-value countdown" id="speedHudTimer">30</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">WPM</span>
+          <span class="hud-value" id="speedHudWpm">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Accuracy</span>
+          <span class="hud-value" id="speedHudAcc">100%</span>
+        </div>
+      </div>
+
+      <div class="typing-arena-wrapper" id="speedArenaWrapper" tabindex="0">
+        <input type="text" id="speedTypingInput" class="typing-hidden-input" style="position: fixed; top: -9999px; left: -9999px; opacity: 0; pointer-events: none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <div class="words-viewport" id="speedWordsViewport">
+          <div class="custom-caret" id="speedCaret"></div>
+          <div class="words-container" id="speedWordsContainer"></div>
+        </div>
+        <div class="focus-overlay" id="speedFocusOverlay">
+          <span>Click to focus</span>
+        </div>
+      </div>
+
+      <div class="typing-actions">
+        <button class="action-btn" id="speedRestartBtn">Restart Test (Tab)</button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div>TypingSpeedTester &bull; Touch Typing Learning Game</div>
+      <div class="footer-links">
+        <span class="footer-link" id="soundStatusText">Sound: Click</span>
+        <span class="footer-link" id="themeStatusText">Theme: EdClub Light</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- LESSON VICTORY CELEBRATION MODAL (5-Star EdClub Style) -->
+  <div class="modal-backdrop" id="lessonVictoryModal" role="dialog" aria-modal="true">
+    <div class="victory-card">
+      <div class="victory-confetti-header">
+        <div class="victory-icon-burst">🏆</div>
+        <h2 class="victory-title">Lesson Completed!</h2>
+        <p class="victory-sub" id="victoryLessonSubtitle">Great job mastering Home Row: F & J</p>
+      </div>
+
+      <!-- Animated 5 Stars Container -->
+      <div class="stars-burst-row" id="starsBurstRow">
+        <span class="star-pop" id="star1">⭐</span>
+        <span class="star-pop" id="star2">⭐</span>
+        <span class="star-pop" id="star3">⭐</span>
+        <span class="star-pop" id="star4">⭐</span>
+        <span class="star-pop" id="star5">⭐</span>
+      </div>
+
+      <!-- XP Points Earned Pill -->
+      <div class="victory-xp-earned" id="victoryXpEarned">+150 XP</div>
+
+      <!-- Score & Metrics Cards -->
+      <div class="victory-stats-grid">
+        <div class="v-stat-card">
+          <span class="v-label">Speed</span>
+          <span class="v-val" id="victoryWpm">24 WPM</span>
+          <span class="v-sub" id="victoryTargetWpm">Target: 15 WPM</span>
+        </div>
+        <div class="v-stat-card">
+          <span class="v-label">Accuracy</span>
+          <span class="v-val" id="victoryAcc">98%</span>
+          <span class="v-sub" id="victoryErrors">1 error</span>
+        </div>
+        <div class="v-stat-card">
+          <span class="v-label">Time Taken</span>
+          <span class="v-val" id="victoryTime">18s</span>
+          <span class="v-sub">Smooth flow</span>
+        </div>
+      </div>
+
+      <!-- Victory Action Buttons -->
+      <div class="victory-actions">
+        <button class="btn-secondary" id="victoryReplayBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Replay Lesson
+        </button>
+        <button class="btn-primary btn-victory-next" id="victoryNextLessonBtn">
+          <span>Next Lesson</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Speed Test Result Modal -->
+  <div class="modal-backdrop" id="speedResultModal" role="dialog" aria-modal="true">
+    <div class="results-card">
+      <div class="results-header">
+        <div>
+          <h2 class="results-title">Speed Test Report</h2>
+          <div class="rank-badge-wrap" style="margin-top: 0.35rem;">
+            <span class="rank-badge" id="speedRankBadge">Speed Demon</span>
+          </div>
+        </div>
+        <button class="icon-btn" id="closeSpeedResultBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="hero-stats-grid">
+        <div class="hero-stat-card">
+          <span class="label">Net WPM</span>
+          <span class="value" id="speedFinalWpm">0</span>
+        </div>
+        <div class="hero-stat-card">
+          <span class="label">Accuracy</span>
+          <span class="value" id="speedFinalAcc">0%</span>
+        </div>
+        <div class="hero-stat-card">
+          <span class="label">Raw WPM</span>
+          <span class="value" id="speedFinalRaw">0</span>
+        </div>
+        <div class="hero-stat-card">
+          <span class="label">Time</span>
+          <span class="value" id="speedFinalTime">0s</span>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="speedChart"></canvas>
+      </div>
+      <div class="results-actions">
+        <button class="btn-primary" id="speedNextBtn">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-msg" id="toastMsg">Ready!</div>
+
+  <!-- Scripts -->
+  <script src="words.js?v=21"></script>
+  <script src="sound.js?v=21"></script>
+  <script src="curriculum.js?v=21"></script>
+  <script src="confetti.js?v=21"></script>
+  <script src="keyboard.js?v=21"></script>
+  <script src="chart.js?v=21"></script>
+  <script src="app.js?v=21"></script>
+</body>
+</html>
